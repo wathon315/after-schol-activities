@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <link rel="stylesheet" href="wathon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <title>After School Activities</title>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container">
+                    <a class="navbar-brand" href="#">Olive</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link active" aria-current="page" href="index.html">Courses</a>
+                            <a class="nav-link" href="#" v-on:click="showCheckout">
+                                {{ cartItemCount }} <span class="fas fa-cart-plus"></span> Shopping Cart
+                            </a>
+                        </div>
+                        <form class="d-flex ms-auto" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div class="sort-container">
+                <label for="sortBy">Sort by:</label>
+                <select v-model="sortAttribute" @change="sortLessons">
+                    <option value="subject">Subject</option>
+                    <option value="location">Location</option>
+                    <option value="price">Price</option>
+                    <option value="spaces">Spaces</option>
+                </select>
+                <label for="sortOrder">Choose:</label>
+        <select v-model="sortOrder" @change="sortLessons">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+            </div>
+            <div v-if="showLesson">
+                <div class="lesson-container">
+                    <div v-for="lesson in sortedLessons" :key="lesson.id" class="lesson-box">
+                        <div class="lesson-content">
+                            <img v-bind:src="lesson.image" alt="Activity Image" width="250">
+                            <div class="lesson-info">
+                                <p><strong>Subject:</strong> {{ lesson.subject }}</p>
+                                <p><strong>Location:</strong> {{ lesson.location }}</p>
+                                <p><strong>Price:</strong> ${{ lesson.price }}</p>
+                                <p><strong>Spaces:</strong> {{ lesson.spaces }}</p>
+                                <button v-if="lesson.spaces > 0" v-on:click="addItem(lesson)" class="add-to-cart">
+                                    Add to Cart
+                                </button>
+                                <button v-else class="add-to-cart" disabled>
+                                    Out of Space
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="checkout-container">
+                <div class="checkout-box">
+                    <h5 class="text-center">Please fill your information to complete this order!</h5>
+                    <div class="checkout-info">
+                        <p>
+                            <strong>Name:</strong>
+                            <input v-model.trim="checkout.name" />
+                        </p>
+                        <p>
+                            <strong>Email:</strong>
+                            <input v-model="checkout.email" />
+                        <p>
+                            <strong>Address:</strong>
+                            <input v-model="checkout.address" />
+                        </p>
+                        <p>
+                            <strong>City:</strong>
+                            <input v-model="checkout.city" />
+                        </p>
+                        <p>
+                            <strong>State:</strong>
+                            <select v-model="checkout.state">
+                                <option disabled value="">State</option>
+                                <option v-bind:value="states.AL">AL</option>
+                                <option v-bind:value="states.AR">AR</option>
+                                <option v-bind:value="states.CA">CA</option>
+                                <option v-bind:value="states.NV">NV</option>
+                            </select>
+                        </p>
+                        <p>
+                            <strong>Zip/ Postal code:</strong>
+                            <input v-model.number="checkout.zip" />
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script type="text/javascript">
+        var webstore = new Vue({
+            el: '#app',
+            data: {
+                lessons: [
+                    {
+                        id: 1,
+                        subject: "Cooking",
+                        location: "New York",
+                        price: 100,
+                        spaces: 5,
+                        image: "images/cooking.webp"
+                    },
+                    {
+                        id: 2,
+                        subject: "Robotics",
+                        location: "California",
+                        price: 200,
+                        spaces: 7,
+                        image: "images/robotics.jpg"
+                    },
+                    {
+                        id: 3,
+                        subject: "Hiking",
+                        location: "Austin",
+                        price: 100,
+                        spaces: 9,
+                        image: "images/hiking.jpg"
+                    },
+                    {
+                        id: 4,
+                        subject: "Gardening",
+                        location: "Phoenix",
+                        price: 90,
+                        spaces: 10,
+                        image: "images/gardening.jpg"
+                    },
+                    {
+                        id: 5,
+                        subject: "Pottery",
+                        location: "Los Angeles",
+                        price: 200,
+                        spaces: 5,
+                        image: "images/pottery.webp"
+                    },
+                    {
+                        id: 6,
+                        subject: "Painting",
+                        location: "Chicago",
+                        price: 150,
+                        spaces: 7,
+                        image: "images/painting.jpg"
+                    },
+                    {
+                        id: 7,
+                        subject: "Designer",
+                        location: "New York",
+                        price: 180,
+                        spaces: 8,
+                        image: "images/designer.jpg"
+                    },
+                    {
+                        id: 8,
+                        subject: "Material Arts",
+                        location: "San Diego",
+                        price: 150,
+                        spaces: 6,
+                        image: "images/arts.webp"
+                    },
+                    {
+                        id: 9,
+                        subject: "Hip-Hop Dance",
+                        location: "Austin",
+                        price: 130,
+                        spaces: 5,
+                        image: "images/dance.jpg"
+                    },
+                    {
+                        id: 10,
+                        subject: "Ballet",
+                        location: "California",
+                        price: 130,
+                        spaces: 7,
+                        image: "images/ballet.webp"
+                    },
+                    {
+                        id: 11,
+                        subject: "Synthesis Cohorts",
+                        location: "Boston",
+                        price: 80,
+                        spaces: 8,
+                        image: "images/synthesis.jpg"
+                    },
+                    {
+                        id: 12,
+                        subject: "Entrepreneurship Clubs",
+                        location: "Columbus",
+                        price: 170,
+                        spaces: 5,
+                        image: "images/entre.jpg"
+                    }
+                ],
+                cart: [],
+                showLesson: true,
+                checkout: {
+                    name: '',
+                    email: '',
+                    address: '',
+                    city: '',
+                    zip: '',
+                    state: '',
+                    method: 'Home',
+                },
+                states: {
+                    AL: 'Alabama',
+                    AR: 'Arizona',
+                    CA: 'California',
+                    NV: 'Nevada'
+                },
+                sortAttribute: "subject",
+                sortOrder: "asc", 
+            },
+            methods: {
+                addItem(lesson) {
+                    if (lesson.spaces > 0) {
+                        lesson.spaces--;
+                        this.cart.push(lesson.id);
+                        //alert(lesson.subject + " added to cart!")//;
+                    }
+                },
+                canAddToCart(lesson) {
+                    return lesson.spaces > 0;
+                },
+                showCheckout: function () {
+                    this.showLesson = !this.showLesson;
+                    console.log("Checkout toggled. showLesson is now:", this.showLesson);
+                },
+                sortLessons() {
+            this.lessons = [...this.sortedLessons]; 
+        }
+            },
+            computed: {
+                cartItemCount: function () {
+                    return this.cart.length || "";
+                },
+                sortedLessons() {
+            return [...this.lessons].sort((a, b) => {
+                let attr = this.sortAttribute;
+                let order = this.sortOrder === "asc" ? 1 : -1;
+
+                if (typeof a[attr] === "string") {
+                    return a[attr].localeCompare(b[attr]) * order; 
+                }
+                return (a[attr] - b[attr]) * order; 
+            });
+        }
+            }
+            
+        })
+    </script>
+</body>
+
+</html>
