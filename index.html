@@ -270,7 +270,15 @@
                 },
                 sortLessons() {
             this.lessons = [...this.sortedLessons]; 
-        }
+        },
+        removeItem(index) {
+    const lessonId = this.cart[index];
+    const lesson = this.lessons.find(l => l.id === lessonId);
+    if (lesson) {
+        lesson.spaces++; 
+    }
+    this.cart.splice(index, 1); 
+}
             },
             computed: {
                 cartItemCount: function () {
@@ -279,6 +287,9 @@
                 cartItems: function () {
                     return this.cart.map(id => this.lessons.find(lesson =>lesson.id === id));
                 },
+                totalPrice: function () {
+        return this.cartItems.reduce((sum, lesson) => sum + lesson.price, 0);
+    },
                 sortedLessons() {
             return [...this.lessons].sort((a, b) => {
                 let attr = this.sortAttribute;
