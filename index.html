@@ -39,21 +39,22 @@
             </nav>
         </header>
         <main>
-            <div class="sort-container">
-                <label for="sortBy">Sort by:</label>
-                <select v-model="sortAttribute" @change="sortLessons">
-                    <option value="subject">Subject</option>
-                    <option value="location">Location</option>
-                    <option value="price">Price</option>
-                    <option value="spaces">Spaces</option>
-                </select>
-                <label for="sortOrder">Choose:</label>
-        <select v-model="sortOrder" @change="sortLessons">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-            </div>
+           
             <div v-if="showLesson">
+                <div class="sort-container">
+                    <label for="sortBy">Sort by:</label>
+                    <select v-model="sortAttribute" @change="sortLessons">
+                        <option value="subject">Subject</option>
+                        <option value="location">Location</option>
+                        <option value="price">Price</option>
+                        <option value="spaces">Spaces</option>
+                    </select>
+                    <label for="sortOrder">Choose:</label>
+            <select v-model="sortOrder" @change="sortLessons">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+                </div>
                 <div class="lesson-container">
                     <div v-for="lesson in sortedLessons" :key="lesson.id" class="lesson-box">
                         <div class="lesson-content">
