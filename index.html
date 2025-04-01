@@ -77,7 +77,22 @@
             </div>
             <div v-else class="checkout-container">
                 <div class="checkout-box">
-
+                    <h5 class="text-center">Your Shopping Cart</h5>
+                    <div v-if="cartItems.length > 0">
+                        <ul>
+                            <li>
+                                <li v-for="(lesson, index) in cartItems" :key="index">
+                                    {{ lesson.subject }} - ${{ lesson.price }}
+                                    <button @click="removeItem(index)" class="remove-btn">Remove</button>
+                                </li>
+                            </li>
+                        </ul>
+                        <p><strong>Total Price:</strong> ${{totalPrice}}</p>
+                    </div>
+                    <div v-else>
+                        <p>Your Cart is Empty!</p>
+                    </div>
+                
                     <h5 class="text-center">Please fill your information to complete this order!</h5>
                     <div class="checkout-info">
                         <p>
@@ -260,6 +275,9 @@
             computed: {
                 cartItemCount: function () {
                     return this.cart.length || "";
+                },
+                cartItems: function () {
+                    return this.cart.map(id => this.lessons.find(lesson =>lesson.id === id));
                 },
                 sortedLessons() {
             return [...this.lessons].sort((a, b) => {
