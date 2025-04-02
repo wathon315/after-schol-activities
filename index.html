@@ -26,7 +26,8 @@
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link active" aria-current="page" href="index.html">Courses</a>
-                            <a class="nav-link" href="#" :class="{disabled: cart.length===0}" @click="cart.length>0 && showCheckout()">
+                            <a class="nav-link" href="#" :class="{disabled: cart.length===0}"
+                                @click="cart.length>0 && showCheckout()">
                                 {{ cartItemCount }} <span class="fas fa-cart-plus"></span> Shopping Cart
                             </a>
                         </div>
@@ -39,7 +40,7 @@
             </nav>
         </header>
         <main>
-           
+
             <div v-if="showLesson">
                 <div class="sort-container">
                     <label for="sortBy">Sort by:</label>
@@ -50,10 +51,10 @@
                         <option value="spaces">Spaces</option>
                     </select>
                     <label for="sortOrder">Choose:</label>
-            <select v-model="sortOrder" @change="sortLessons">
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-            </select>
+                    <select v-model="sortOrder" @change="sortLessons">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
                 </div>
                 <div class="lesson-container">
                     <div v-for="lesson in sortedLessons" :key="lesson.id" class="lesson-box">
@@ -76,25 +77,25 @@
                 </div>
             </div>
             <div v-else class="checkout-container">
-                <div class="checkout-box">
-                    <h5 class="text-center">Your Shopping Cart</h5>
-                    <div v-if="cartItems.length > 0">
-                        <ul>
-                            <li>
+                <div class="checkout-box dual-column">
+                    <div class="cart-summary">
+                        <h5>🛒 Your Shopping Cart</h5>
+                        <div v-if="cartItems.length > 0">
+                            <ul>
                                 <li v-for="(lesson, index) in cartItems" :key="index">
                                     {{ lesson.subject }} - ${{ lesson.price }}
                                     <button @click="removeItem(index)" class="remove-btn">Remove</button>
                                 </li>
-                            </li>
-                        </ul>
-                        <p><strong>Total Price:</strong> ${{totalPrice}}</p>
+                            </ul>
+                            <p><strong>Total Price:</strong> ${{ totalPrice }}</p>
+                        </div>
+                        <div v-else>
+                            <p>Your cart is empty.</p>
+                        </div>
                     </div>
-                    <div v-else>
-                        <p>Your Cart is Empty!</p>
-                    </div>
-                
-                    <h5 class="text-center">Please fill your information to complete this order!</h5>
                     <div class="checkout-info">
+                        <h5 class="text-center">Please fill your information to complete this order!</h5>
+
                         <p>
                             <strong>Name:</strong>
                             <input v-model.trim="checkout.name" />
@@ -127,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </main>
     </div>
 
@@ -251,7 +252,7 @@
                     NV: 'Nevada'
                 },
                 sortAttribute: "subject",
-                sortOrder: "asc", 
+                sortOrder: "asc",
             },
             methods: {
                 addItem(lesson) {
@@ -269,40 +270,40 @@
                     console.log("Checkout toggled. showLesson is now:", this.showLesson);
                 },
                 sortLessons() {
-            this.lessons = [...this.sortedLessons]; 
-        },
-        removeItem(index) {
-    const lessonId = this.cart[index];
-    const lesson = this.lessons.find(l => l.id === lessonId);
-    if (lesson) {
-        lesson.spaces++; 
-    }
-    this.cart.splice(index, 1); 
-}
+                    this.lessons = [...this.sortedLessons];
+                },
+                removeItem(index) {
+                    const lessonId = this.cart[index];
+                    const lesson = this.lessons.find(l => l.id === lessonId);
+                    if (lesson) {
+                        lesson.spaces++;
+                    }
+                    this.cart.splice(index, 1);
+                }
             },
             computed: {
                 cartItemCount: function () {
                     return this.cart.length || "";
                 },
                 cartItems: function () {
-                    return this.cart.map(id => this.lessons.find(lesson =>lesson.id === id));
+                    return this.cart.map(id => this.lessons.find(lesson => lesson.id === id));
                 },
                 totalPrice: function () {
-        return this.cartItems.reduce((sum, lesson) => sum + lesson.price, 0);
-    },
+                    return this.cartItems.reduce((sum, lesson) => sum + lesson.price, 0);
+                },
                 sortedLessons() {
-            return [...this.lessons].sort((a, b) => {
-                let attr = this.sortAttribute;
-                let order = this.sortOrder === "asc" ? 1 : -1;
+                    return [...this.lessons].sort((a, b) => {
+                        let attr = this.sortAttribute;
+                        let order = this.sortOrder === "asc" ? 1 : -1;
 
-                if (typeof a[attr] === "string") {
-                    return a[attr].localeCompare(b[attr]) * order; 
+                        if (typeof a[attr] === "string") {
+                            return a[attr].localeCompare(b[attr]) * order;
+                        }
+                        return (a[attr] - b[attr]) * order;
+                    });
                 }
-                return (a[attr] - b[attr]) * order; 
-            });
-        }
             }
-            
+
         })
     </script>
 </body>
