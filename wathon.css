@@ -99,6 +99,20 @@
     justify-content: space-between;
     align-items: center;
 }
+.checkout-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .checkout-button:disabled {
+    background-color: black;
+    cursor: not-allowed;
+  }
 
 .remove-btn {
     background-color: #dc3545;
