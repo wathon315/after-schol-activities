@@ -82,8 +82,12 @@
                         <h5>🛒 Your Shopping Cart</h5>
                         <div v-if="cartItems.length > 0">
                             <ul>
-                                <li v-for="(lesson, index) in cartItems" :key="index">
-                                    {{ lesson.subject }} - ${{ lesson.price }}
+                                <li v-for="(lesson, index) in cartItems" :key="index" class="cart-item">
+                                    <img :src="lesson.image" alt="lesson image" class="cart-img">
+                                    <div class="cart-info">
+                                        <p><strong>{{ lesson.subject }}</strong></p>
+                                        <p>${{ lesson.price }}</p>
+                                      </div>  
                                     <button @click="removeItem(index)" class="remove-btn">Remove</button>
                                 </li>
                             </ul>
