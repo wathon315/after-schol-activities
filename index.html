@@ -87,7 +87,7 @@
                                     <div class="cart-info">
                                         <p><strong>{{ lesson.subject }}</strong></p>
                                         <p>${{ lesson.price }}</p>
-                                      </div>  
+                                    </div>
                                     <button @click="removeItem(index)" class="remove-btn">Remove</button>
                                 </li>
                             </ul>
@@ -102,14 +102,17 @@
 
                         <p>
                             <strong>Name:</strong>
-                            <input v-model.trim="checkout.name" />
+                            <input v-model="checkout.name" />
                         </p>
                         <p>
                             <strong>Email:</strong>
                             <input v-model="checkout.email" />
                         <p>
-                            <strong>Address:</strong>
-                            <input v-model="checkout.address" />
+                        <p><strong>Phone:</strong>
+                            <input v-model="checkout.phone" />
+                        </p>
+                        <strong>Address:</strong>
+                        <input v-model="checkout.address" />
                         </p>
                         <p>
                             <strong>City:</strong>
@@ -128,6 +131,11 @@
                         <p>
                             <strong>Zip/ Postal code:</strong>
                             <input v-model.number="checkout.zip" />
+                        </p>
+                        <p>
+                            <button class="checkout-button" :disabled="!isFormValid" @click="submitOrder">
+                                Checkout
+                            </button>
                         </p>
                     </div>
                 </div>
@@ -243,6 +251,7 @@
                 checkout: {
                     name: '',
                     email: '',
+                    phone: '',
                     address: '',
                     city: '',
                     zip: '',
@@ -283,6 +292,21 @@
                         lesson.spaces++;
                     }
                     this.cart.splice(index, 1);
+                },
+                submitOrder() {
+                    alert("Order submitted successfully!");
+                    this.cart = [];
+                    this.checkout = {
+                        name: '',
+                        phone: '',
+                        email: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: ''
+                    };
+
+                    this.showLesson = true;
                 }
             },
             computed: {
@@ -305,10 +329,19 @@
                         }
                         return (a[attr] - b[attr]) * order;
                     });
+                },
+                isFormValid() {
+                    const name = this.checkout.name;
+                    const phone = this.checkout.phone;
+
+                    const nameIsValid = /^[A-Za-z\s]+$/.test(name);
+                    const phoneIsValid = /^[0-9]+$/.test(phone);
+
+                    return nameIsValid && phoneIsValid;
                 }
             }
-
-        })
+        }
+        )
     </script>
 </body>
 
